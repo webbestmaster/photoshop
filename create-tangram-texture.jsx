@@ -3,50 +3,6 @@
 // enable double clicking from the Macintosh Finder or the Windows Explorer
 #target photoshop
 
-
-
-if (!Object.keys) {
-    Object.keys = (function() {
-        'use strict';
-        var hasOwnProperty = Object.prototype.hasOwnProperty,
-            hasDontEnumBug = !({ toString: null }).propertyIsEnumerable('toString'),
-            dontEnums = [
-                'toString',
-                'toLocaleString',
-                'valueOf',
-                'hasOwnProperty',
-                'isPrototypeOf',
-                'propertyIsEnumerable',
-                'constructor'
-            ],
-            dontEnumsLength = dontEnums.length;
-
-        return function(obj) {
-            if (typeof obj !== 'object' && (typeof obj !== 'function' || obj === null)) {
-                throw new TypeError('Object.keys called on non-object');
-            }
-
-            var result = [], prop, i;
-
-            for (prop in obj) {
-                if (hasOwnProperty.call(obj, prop)) {
-                    result.push(prop);
-                }
-            }
-
-            if (hasDontEnumBug) {
-                for (i = 0; i < dontEnumsLength; i++) {
-                    if (hasOwnProperty.call(obj, dontEnums[i])) {
-                        result.push(dontEnums[i]);
-                    }
-                }
-            }
-            return result;
-        };
-    }());
-}
-
-
 // in case we double clicked the file
 app.bringToFront();
 
@@ -63,19 +19,6 @@ var layer = srcDoc.activeLayer;
 layer.translate(100, 100);
 layer.rotate(45);
 
-
-var layerStyleObj =
-{
-    "blendOptions":
-    {
-        "fillOpacity": 70,
-        "blendInterior": true
-    }
-};
-
-//layer.applyStyle(null);
-
-layer.applyStyle(layerStyleObj);
 
 
 /*
