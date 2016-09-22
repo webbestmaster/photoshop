@@ -12,11 +12,17 @@ var p0 = 0,
 
 var figures = [
     {
-        name: 'png file name',
-        selection: [[p0,p0], [p4, p0], [p2, p2]],
+        name: 'square',
+        selection: [[p3, p3], [p2, p4], [p1, p3], [p2,p2]]
+    },
+    {
+        name: 'parallelogram',
+        selection: [[p0,p0], [p1, p1], [p1, p3], [p0, p2]],
         translate: [0, 0],
         rotate: 0 // angle of rotate
     }
+
+
 ];
 
 for (var i = 0, len = figures.length; i < len; i += 1) {
@@ -25,6 +31,9 @@ for (var i = 0, len = figures.length; i < len; i += 1) {
 
 
 function savePiece(figure) {
+
+    // srcDoc.selection.deselect();
+
     // make selection
     srcDoc.selection.select(figure.selection, SelectionType.REPLACE, 0, false);
 
@@ -34,26 +43,25 @@ function savePiece(figure) {
 
     var newLayer = srcDoc.activeLayer;
 
-    newLayer.translate(figure.translate[0], figure.translate[1]);
-    newLayer.rotate(figure.rotate);
+    figure.translate && newLayer.translate(figure.translate[0], figure.translate[1]);
+    figure.rotate && newLayer.rotate(figure.rotate);
 
     var bounds = newLayer.bounds;
-
-    var width = bounds[2] - bounds[0]; //Grab the W value
-    var height = bounds[3] - bounds[1]; //Grab the H value
-
     var b1 = bounds[1],
         b2 = bounds[2],
         b3 = bounds[3],
         b0 = bounds[0];
 
     srcDoc.selection.select([
-        [b1, b0],
+        [b0, b1],
         [b2, b0],
         [b2, b3],
-        [b1, b3]
+        [b0, b3]
     ], SelectionType.REPLACE, 0, false);
     srcDoc.selection.copy();
+
+    var width = b2 - b0; //Grab the W value
+    var height = b3 - b1; //Grab the H value
 
     var pasteDoc = app.documents.add(width, height, srcDoc.resolution, "Paste Target");
     pasteDoc.paste();
@@ -66,7 +74,7 @@ function savePiece(figure) {
     options.transparency = true;
     options.optimized = false;
 
-    pasteDoc.exportDocument(File(srcDoc.path+'/export ' + srcDoc.name + figure.name +'.png'), ExportType.SAVEFORWEB, options);
+    pasteDoc.exportDocument(File(srcDoc.path+'/texture-' + srcDoc.name.replace(/\.[^\.]*?$/, '') + '-' + figure.name + '.png'), ExportType.SAVEFORWEB, options);
 
     pasteDoc.close(SaveOptions.DONOTSAVECHANGES);
 
