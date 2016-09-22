@@ -1,8 +1,7 @@
+
 app.bringToFront();
 
 var srcDoc = app.activeDocument;
-
-// srcDoc.activeLayer = app.activeDocument.layers[app.activeDocument.layers.length - 1];
 
 var p0 = 0,
     p1 = 256,
@@ -12,32 +11,45 @@ var p0 = 0,
 
 var figures = [
     {
+        name: 'triangleMedium',
+        selection: [[p0, p2], [p2, p4], [p0, p4]],
+        translate: [p1, -p1],
+        rotate: 135 // angle of rotate
+    },
+    {
+        name: 'triangleBig-1',
+        selection: [[p0, p0], [p4, p0], [p2, p2]]
+    },
+    {
+        name: 'triangleBig-2',
+        selection: [[p4, p0], [p4, p4], [p2, p2]]
+    },
+    {
         name: 'square',
-        selection: [[p3, p3], [p2, p4], [p1, p3], [p2,p2]]
+        selection: [[p3, p3], [p2, p4], [p1, p3], [p2, p2]]
     },
     {
         name: 'parallelogram',
-        selection: [[p0,p0], [p1, p1], [p1, p3], [p0, p2]],
-        translate: [0, 0],
-        rotate: 0 // angle of rotate
+        selection: [[p0, p0], [p1, p1], [p1, p3], [p0, p2]]
+    },
+    {
+        name: 'triangleSmall-1',
+        selection: [[p1, p1], [p2, p2], [p1, p3]]
+    },
+    {
+        name: 'triangleSmall-2',
+        selection: [[p3, p3], [p4, p4], [p2, p4]]
     }
-
-
 ];
 
 for (var i = 0, len = figures.length; i < len; i += 1) {
     savePiece(figures[i]);
 }
 
-
 function savePiece(figure) {
 
-    // srcDoc.selection.deselect();
-
-    // make selection
     srcDoc.selection.select(figure.selection, SelectionType.REPLACE, 0, false);
 
-    // select and copy selection
     srcDoc.selection.copy();
     srcDoc.paste();
 
@@ -47,17 +59,18 @@ function savePiece(figure) {
     figure.rotate && newLayer.rotate(figure.rotate);
 
     var bounds = newLayer.bounds;
-    var b1 = bounds[1],
+    var b0 = bounds[0],
+        b1 = bounds[1],
         b2 = bounds[2],
-        b3 = bounds[3],
-        b0 = bounds[0];
+        b3 = bounds[3];
 
     srcDoc.selection.select([
         [b0, b1],
-        [b2, b0],
+        [b2, b1],
         [b2, b3],
         [b0, b3]
     ], SelectionType.REPLACE, 0, false);
+
     srcDoc.selection.copy();
 
     var width = b2 - b0; //Grab the W value
@@ -74,7 +87,7 @@ function savePiece(figure) {
     options.transparency = true;
     options.optimized = false;
 
-    pasteDoc.exportDocument(File(srcDoc.path+'/texture-' + srcDoc.name.replace(/\.[^\.]*?$/, '') + '-' + figure.name + '.png'), ExportType.SAVEFORWEB, options);
+    pasteDoc.exportDocument(File(srcDoc.path + '/texture-' + srcDoc.name.replace(/\.[^\.]*?$/, '') + '-' + figure.name + '.png'), ExportType.SAVEFORWEB, options);
 
     pasteDoc.close(SaveOptions.DONOTSAVECHANGES);
 
