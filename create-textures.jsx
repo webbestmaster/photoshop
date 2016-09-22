@@ -59,22 +59,22 @@ function savePiece(figure) {
     figure.rotate && newLayer.rotate(figure.rotate);
 
     var bounds = newLayer.bounds;
-    var b0 = bounds[0],
-        b1 = bounds[1],
-        b2 = bounds[2],
-        b3 = bounds[3];
+    var x1 = bounds[0],
+        y1 = bounds[1],
+        x2 = bounds[2],
+        y2 = bounds[3];
 
     srcDoc.selection.select([
-        [b0, b1],
-        [b2, b1],
-        [b2, b3],
-        [b0, b3]
+        [x1, y1],
+        [x2, y1],
+        [x2, y2],
+        [x1, y2]
     ], SelectionType.REPLACE, 0, false);
 
     srcDoc.selection.copy();
 
-    var width = b2 - b0; //Grab the W value
-    var height = b3 - b1; //Grab the H value
+    var width = x2 - x1; //Grab the W value
+    var height = y2 - y1; //Grab the H value
 
     var pasteDoc = app.documents.add(width, height, srcDoc.resolution, "Paste Target");
     pasteDoc.paste();
